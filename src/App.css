@@ -1,7 +1,37 @@
+*{
+  background-color: black;
+  color: white;
+}
+
+.grid:hover{
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 8px 20px orange; 
+}
+.btn{
+  background-color: orange;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+}
+.btn:hover{
+  background-color: rgb(3, 3, 3);
+  color: orange;
+  border: 2px solid orange;
+}
 .App {
   text-align: center;
 }
-
+.Title:hover{
+  color: orange;
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out;
+  text-shadow: 0 8px 50px orange; 
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
