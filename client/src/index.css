@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: rgba(255, 255, 255, 0.07);
+    --text: #f0f0f5;
+    --text-muted: #888899;
+    --accent: #e8c547;
+    --accent2: #5b7fff;
+    --red: #ff5f5f;
+    --green: #4ecb71;
+  }
+
+  .light {
+    --bg: #f4f3ef;
+    --surface: #ffffff;
+    --surface2: #f0efe9;
+    --border: rgba(0, 0, 0, 0.08);
+    --text: #1a1a24;
+    --text-muted: #6b6b7b;
+    --accent: #e8c547;
+    --accent2: #5b7fff;
+    --red: #e63946;
+    --green: #2a9d8f;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+@layer components {
+  .news-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .news-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  }
+  
+  .light .news-card:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .btn-hover:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px 0 rgba(232, 197, 71, 0.39);
+  }
+
+  .modal-overlay {
+    backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+}
+
+@layer utilities {
+  .font-playfair {
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .font-mono {
+    font-family: 'DM Mono', monospace;
+  }
+
+  .animate-stagger-fade-up {
+    animation: fadeSlideUp 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .animate-modal-scale {
+    animation: modalScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .ticker-scroll {
+    animation: ticker linear infinite;
+  }
+
+  .ticker-scroll:hover {
+    animation-play-state: paused;
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
