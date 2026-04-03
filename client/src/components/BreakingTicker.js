@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
+import { getCategoryColor } from '../utils/helpers';
 
 const BreakingTicker = () => {
   const [headlines, setHeadlines] = useState([]);
@@ -38,6 +39,9 @@ const BreakingTicker = () => {
                 rel="noopener noreferrer"
                 className="hover:underline font-medium px-4 text-sm"
               >
+                <span style={{ color: getCategoryColor(item.category) }} className="mr-2 font-bold opacity-90">
+                  [{item.category ? item.category.toUpperCase() : 'GENERAL'}]
+                </span>
                 {item.title}
               </a>
               {idx < headlines.length - 1 && <span className="text-white/50 px-2">•</span>}
@@ -53,6 +57,9 @@ const BreakingTicker = () => {
                 rel="noopener noreferrer"
                 className="hover:underline font-medium px-4 text-sm"
               >
+                <span style={{ color: getCategoryColor(item.category) }} className="mr-2 font-bold opacity-90">
+                  [{item.category ? item.category.toUpperCase() : 'GENERAL'}]
+                </span>
                 {item.title}
               </a>
             </React.Fragment>

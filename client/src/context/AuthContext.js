@@ -32,6 +32,16 @@ export const AuthProvider = ({ children }) => {
     initAuth();
   }, []);
 
+  /* ---------- Refresh User ---------- */
+  const refreshUser = async () => {
+    try {
+      const res = await api.get("/auth/me");
+      setUser(res.data.user || res.data);
+    } catch (error) {
+      console.error("Failed to refresh user:", error);
+    }
+  };
+
   /* ---------- Login ---------- */
   const login = async (email, password) => {
     try {
@@ -87,6 +97,7 @@ export const AuthProvider = ({ children }) => {
         register,
         logout,
         setUser,
+        refreshUser,
       }}
     >
       {children}

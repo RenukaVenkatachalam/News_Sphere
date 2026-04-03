@@ -5,6 +5,8 @@ import { AuthContext } from '../context/AuthContext';
 import { getCategoryColor } from '../utils/helpers';
 import ViewCounter from '../components/ViewCounter';
 import NewsCard from '../components/NewsCard';
+import BackButton from '../components/BackButton';
+import { useToast } from '../context/ToastContext';
 import { Clock, Share2, ExternalLink, Bookmark, ArrowLeft, Loader2 } from 'lucide-react';
 
 const ArticleDetail = () => {
@@ -15,6 +17,21 @@ const ArticleDetail = () => {
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const { showToast } = useToast();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const documentHeight = document.documentElement.scrollHeight;
+      const windowHeight = window.innerHeight;
+      const progress = (scrollY / (documentHeight - windowHeight)) * 100;
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -47,13 +64,15 @@ const ArticleDetail = () => {
   }, [id, user]);
 
   const handleSave = async () => {
-    if (!user) return alert('Please sign in to save articles');
+    if (!user) return showToast('Please sign in to save articles', 'error');
 
     try {
       await api.post(`/user/save/${id}`);
       setIsSaved(!isSaved);
+      showToast(isSaved ? 'Article removed from saved' : 'Article saved successfully', 'success');
     } catch (error) {
       console.error('Error saving article', error);
+      showToast('Error saving article', 'error');
     }
   };
 
@@ -65,7 +84,7 @@ const ArticleDetail = () => {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
+      showToast('Link copied to clipboard!', 'success');
     }
   };
 
@@ -92,14 +111,13 @@ const ArticleDetail = () => {
   const readTime = Math.ceil((article.summary?.length || 500) / 200);
 
   return (
-    <div className="max-w-4xl mx-auto py-8">
-
-      <Link
-        to="/"
-        className="inline-flex items-center text-[var(--text-muted)] hover:text-[var(--text)] transition-colors mb-8 font-medium"
-      >
-        <ArrowLeft size={16} className="mr-2" /> Back to headlines
-      </Link>
+    <>
+      <div 
+        className="fixed top-0 left-0 h-1 bg-[var(--accent)] z-50 transition-all duration-100" 
+        style={{ width: `${scrollProgress}%` }} 
+      />
+      <BackButton />
+      <div className="max-w-4xl mx-auto py-8">
 
       <div className="mb-8">
 
@@ -137,7 +155,7 @@ const ArticleDetail = () => {
             <Clock size={16} className="mr-2" />
             <time>{new Date(article.publishedAt).toLocaleString()}</time>
             <span className="mx-3">•</span>
-            <span>{readTime} MIN READ</span>
+            <span>{readTime} min read</span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -225,6 +243,7 @@ const ArticleDetail = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

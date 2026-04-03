@@ -27,6 +27,7 @@ connectDB();
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/news', require('./routes/news'));
 app.use('/api/user', require('./routes/user'));
+app.use('/api/fakenews', require('./routes/fakenews'));
 
 // Basic route
 app.get('/', (req, res) => {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
+import { ToastProvider } from './context/ToastContext';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
@@ -27,7 +28,8 @@ function App() {
 
   return (
     <AuthProvider>
-      <Router>
+      <ToastProvider>
+        <Router>
         <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] flex flex-col font-sans transition-colors duration-300">
           <Navbar 
             setSearchQuery={setSearchQuery} 
@@ -71,7 +73,8 @@ function App() {
             </Routes>
           </main>
         </div>
-      </Router>
+        </Router>
+      </ToastProvider>
     </AuthProvider>
   );
 }

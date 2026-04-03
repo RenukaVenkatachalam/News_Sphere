@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Bookmark, Clock, Flame } from "lucide-react";
+import { Bookmark, Clock, Flame, Shield } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
+import FakeNewsChecker from "./FakeNewsChecker";
 import { Link } from "react-router-dom";
 import ViewCounter from "./ViewCounter";
 import api from "../utils/api";
@@ -10,6 +11,8 @@ const NewsCard = ({ article, onSaveToggle }) => {
   const { user } = useContext(AuthContext);
 
   const [isSaved, setIsSaved] = useState(false);
+  const [fakeNewsModalOpen, setFakeNewsModalOpen] = useState(false);
+  const [fakeNewsResult, setFakeNewsResult] = useState(null);
 
   const articleId = article?._id || null;
 
@@ -80,7 +83,8 @@ const NewsCard = ({ article, onSaveToggle }) => {
 
   /* ---------- Render ---------- */
   return (
-    <div className="news-card rounded-xl overflow-hidden flex flex-col h-full group relative">
+    <>
+    <div className={`news-card rounded-xl overflow-hidden flex flex-col h-full group relative border ${fakeNewsResult ? (fakeNewsResult.color === 'green' ? 'border-green-500' : fakeNewsResult.color === 'yellow' ? 'border-yellow-500' : 'border-red-500') : 'border-transparent'}`}>
 
       <Link
         to={`/article/${articleId}`}
@@ -176,12 +180,37 @@ const NewsCard = ({ article, onSaveToggle }) => {
 
           <span className="mx-2">•</span>
 
-          <span>{readTime} MIN READ</span>
+          <span className="flex items-center">
+            <Clock size={12} className="mr-1.5 opacity-70" />
+            {readTime} min read
+          </span>
+          
+          <div className="ml-auto flex items-center">
+            {fakeNewsResult && (
+              <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase mr-2 border border-${fakeNewsResult.color}-500 text-${fakeNewsResult.color}-500`}>
+                {fakeNewsResult.verdict}
+              </span>
+            )}
+            <button 
+              onClick={(e) => { e.preventDefault(); setFakeNewsModalOpen(true); }}
+              className="flex items-center text-[var(--accent)] hover:bg-[var(--surface2)] px-2 py-1 rounded transition-colors"
+            >
+              <Shield size={12} className="mr-1" /> Check
+            </button>
+          </div>
 
         </div>
 
       </div>
     </div>
+    <FakeNewsChecker 
+      isOpen={fakeNewsModalOpen} 
+      onClose={() => setFakeNewsModalOpen(false)} 
+      initialContent={article?.title + '\n\n' + article?.summary}
+      initialSource={article?.source}
+      onResult={(res) => setFakeNewsResult(res)}
+    />
+    </>
   );
 };
 

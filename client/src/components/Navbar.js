@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { Search, Bell, User, LogOut, Sun, Moon, Sparkles } from "lucide-react";
+import { Search, Shield, User, LogOut, Sun, Moon, Sparkles } from "lucide-react";
 import LoginModal from "./LoginModal";
+import FakeNewsChecker from "./FakeNewsChecker";
 
 const CATEGORIES = [
   "All",
@@ -24,6 +25,7 @@ const Navbar = ({ setSearchQuery, activeCategory, setActiveCategory }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showFakeNewsModal, setShowFakeNewsModal] = useState(false);
 
   /* ---------------- Theme Init ---------------- */
   useEffect(() => {
@@ -155,6 +157,13 @@ const Navbar = ({ setSearchQuery, activeCategory, setActiveCategory }) => {
             {/* Right Actions */}
             <div className="flex items-center gap-3 md:gap-5 flex-shrink-0">
 
+              <button
+                onClick={() => setShowFakeNewsModal(true)}
+                className="border border-[var(--accent)] text-[var(--accent)] rounded-full px-4 py-2 text-sm font-semibold hover:bg-[var(--accent)]/10 transition-colors hidden sm:flex items-center gap-1.5"
+              >
+                <Shield size={16} /> Fact Check
+              </button>
+
               {/* Theme */}
               <button
                 onClick={toggleTheme}
@@ -166,12 +175,6 @@ const Navbar = ({ setSearchQuery, activeCategory, setActiveCategory }) => {
 
               {user ? (
                 <>
-                  {/* Notifications */}
-                  <button className="relative p-2.5 rounded-full text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--surface)] transition-colors">
-                    <Bell size={20} />
-                    <span className="absolute top-1 right-1.5 w-2.5 h-2.5 bg-[#ff5f5f] rounded-full border-2 border-[var(--bg)]"></span>
-                  </button>
-
                   {/* User */}
                   <div className="relative">
                     <button
@@ -257,6 +260,10 @@ const Navbar = ({ setSearchQuery, activeCategory, setActiveCategory }) => {
       <LoginModal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
+      />
+      <FakeNewsChecker
+        isOpen={showFakeNewsModal}
+        onClose={() => setShowFakeNewsModal(false)}
       />
     </>
   );

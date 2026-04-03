@@ -1,15 +1,17 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import api from '../utils/api';
+import BackButton from '../components/BackButton';
 import { Settings, Save, Check } from 'lucide-react';
 
 const availableCategories = ['Technology', 'Politics', 'Business', 'Science', 'Health', 'Sports', 'Entertainment'];
 
 const Profile = () => {
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser, refreshUser } = useContext(AuthContext);
+  const { showToast } = useToast();
   const [preferences, setPreferences] = useState([]);
   const [saving, setSaving] = useState(false);
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     if (user && user.preferredCategories) {
@@ -34,12 +36,12 @@ const Profile = () => {
       });
 
       setUser({ ...user, preferredCategories: res.data });
-
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
+      if (refreshUser) await refreshUser();
+      showToast('✅ Feed updated! Your preferences are now live.', 'success');
 
     } catch (err) {
       console.error('Failed to save preferences:', err);
+      showToast('Failed to save preferences', 'error');
     } finally {
       setSaving(false);
     }
@@ -48,9 +50,11 @@ const Profile = () => {
   if (!user) return null;
 
   return (
+    <>
+    <BackButton />
     <div className="max-w-3xl mx-auto">
 
-      <div className="bg-card shadow-sm border border-slate-100 rounded-2xl p-8">
+      <div className="bg-[var(--surface)] text-[var(--text)] shadow-sm border border-[var(--border)] rounded-2xl p-8">
 
         <div className="flex items-center space-x-3 text-slate-800 mb-8 border-b border-slate-100 pb-6">
           <div className="p-3 bg-blue-50 text-primary rounded-full">
@@ -160,11 +164,6 @@ const Profile = () => {
 
               {saving ? (
                 <>Saving...</>
-              ) : success ? (
-                <>
-                  <Check size={18} />
-                  <span>Saved Successfully</span>
-                </>
               ) : (
                 <>
                   <Save size={18} />
@@ -179,6 +178,7 @@ const Profile = () => {
 
       </div>
     </div>
+    </>
   );
 };
 
