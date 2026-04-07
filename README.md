@@ -1,5 +1,7 @@
 # NewsSphere 📰
 
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://news-sphere-3.onrender.com)
+
 NewsSphere is a modern, full-stack news application built with the MERN stack (MongoDB, Express, React, Node.js). It provides users with a seamless experience to browse, search, and save news articles, while also featuring basic user authentication and profile management.
 
 ## 🚀 Features
